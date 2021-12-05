@@ -36,6 +36,12 @@
 			#legend{
 				margin: auto !important;
 			}
+
+			#c_in{
+				width: 60%;
+				margin-left: auto;
+				margin-right: auto;
+			}
 	</style>
 </head>
 
@@ -76,6 +82,12 @@
 		<label class="btn btn-outline-primary" for="btnradio11">Total</label>
 	</div>
 	<div id="tooltip"></div>
+	<div class="input-group mt-3 mb-3" id="c_in">
+		<input id="search_in" type="text" class="form-control" placeholder="Search by country name" aria-label="Search by country name" aria-describedby="basic-addon2">
+		<div class="input-group-append">
+		  <button id="search_btn" class="btn btn-outline-secondary" type="button">Search</button>
+		</div>
+	</div>
 	<svg id="map"></svg>
 	<svg id="legend"></svg>
 

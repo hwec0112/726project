@@ -250,6 +250,15 @@ const countryListAlpha3 = {
   "ALA": "Åland Islands"
 };
 
+function objectFlip(obj) {
+  const ret = {};
+  Object.keys(obj).forEach(key => {
+    ret[obj[key].toUpperCase()] = key;
+  });
+  return ret;
+}
+const countryList_invert = objectFlip(countryListAlpha3);
+// console.log(countryList_invert);
 
 // set the dimensions and margins of the graph
 var margin = {top: 40, right: 10, bottom: 40, left: 100},
@@ -263,17 +272,6 @@ var svg = d3.select("svg")
   .append("g")
   .attr("transform",
         "translate(" + margin.left + "," + margin.top + ")")
-// zoom
-// function zoomed(event) {
-//   console.log(event);
-//   const {transform} = event;
-//   g.attr("transform", transform);
-//   g.attr("stroke-width", 1 / transform.k);
-// }
-
-// const zoom = d3.zoom()
-//   .scaleExtent([1, 8])
-//   .on("zoom", zoomed);
 
 // create a tooltip
 var tooltip = d3.select("#tooltip")
@@ -326,7 +324,6 @@ var colorScale = d3.scaleThreshold()
 
 var promises = []
 promises.push(d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson"));
-// promises.push(d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world_population.csv", function(d) { data.set(d.code, +d.pop); }))
 promises.push(d3.csv("https://raw.githubusercontent.com/hwec0112/726project/main/data/t_5.csv", function(d) { 
                 dkeys = Object.keys(d)
                 for (let i = 0; i < dkeys.length-1; i++){
@@ -341,8 +338,6 @@ promises.push(d3.csv("https://raw.githubusercontent.com/hwec0112/726project/main
 // color = d3.scaleSequential(y.domain(), d3.interpolateTurbo)
 // console.log(color)
 // console.log(data[10].values())
-
-const select = document.getElementById('class_radio');
 
 function make_map(){
   svg.select("g").remove();
@@ -362,81 +357,13 @@ function make_map(){
           .style("stroke", "black")
         
         d.total = data[cur_idx].get(countryListAlpha3[d.id]) || -1;
-
         tooltip
-          .style("opacity", 0.8)
-          .html(countryListAlpha3[d.id] + ": " + d3.format(",.2r")(d.total))
-          .style("left", (d3.event.pageX) + "px")		
-          .style("top", (d3.event.pageY - 28) + "px");
+            .style("opacity", 0.8)
+            .html(countryListAlpha3[d.id] + ": " + d3.format(",.2r")(d.total))
+            .style("left", (d3.event.pageX) + "px")		
+            .style("top", (d3.event.pageY - 28) + "px");
       }
   }
-
-  //   // create continuous color legend
-  // function continuous(selector_id, colorscale) {
-  //   var legendheight = 200,
-  //       legendwidth = 80,
-  //       margin = {top: 10, right: 60, bottom: 10, left: 2};
-
-  //   var canvas = d3.select(selector_id)
-  //     .style("height", legendheight + "px")
-  //     .style("width", legendwidth + "px")
-  //     .style("position", "relative")
-  //     .append("canvas")
-  //     .attr("height", legendheight - margin.top - margin.bottom)
-  //     .attr("width", 1)
-  //     .style("height", (legendheight - margin.top - margin.bottom) + "px")
-  //     .style("width", (legendwidth - margin.left - margin.right) + "px")
-  //     .style("border", "1px solid #000")
-  //     .style("position", "absolute")
-  //     .style("top", (margin.top) + "px")
-  //     .style("left", (margin.left) + "px")
-  //     .node();
-
-  //   var ctx = canvas.getContext("2d");
-
-  //   var legendscale = d3.scaleLinear()
-  //     .range([1, legendheight - margin.top - margin.bottom])
-  //     .domain(colorscale.domain());
-
-  //   // image data hackery based on http://bl.ocks.org/mbostock/048d21cf747371b11884f75ad896e5a5
-  //   var image = ctx.createImageData(1, legendheight);
-  //   d3.range(legendheight).forEach(function(i) {
-  //     var c = d3.rgb(colorscale(legendscale.invert(i)));
-  //     image.data[4*i] = c.r;
-  //     image.data[4*i + 1] = c.g;
-  //     image.data[4*i + 2] = c.b;
-  //     image.data[4*i + 3] = 255;
-  //   });
-  //   ctx.putImageData(image, 0, 0);
-
-  //   // A simpler way to do the above, but possibly slower. keep in mind the legend width is stretched because the width attr of the canvas is 1
-  //   // See http://stackoverflow.com/questions/4899799/whats-the-best-way-to-set-a-single-pixel-in-an-html5-canvas
-  //   /*
-  //   d3.range(legendheight).forEach(function(i) {
-  //     ctx.fillStyle = colorscale(legendscale.invert(i));
-  //     ctx.fillRect(0,i,1,1);
-  //   });
-  //   */
-
-  //   var legendaxis = d3.axisRight()
-  //     .scale(legendscale)
-  //     .tickSize(6)
-  //     .ticks(8);
-
-  //   var svg = d3.select(selector_id)
-  //     .append("svg")
-  //     .attr("height", (legendheight) + "px")
-  //     .attr("width", (legendwidth) + "px")
-  //     .style("position", "absolute")
-  //     .style("left", "0px")
-  //     .style("top", "0px")
-
-  //   svg
-  //     .append("g")
-  //     .attr("class", "axis")
-  //     .attr("transform", "translate(" + (legendwidth - margin.left - margin.right + 3) + "," + (margin.top) + ")")
-  //     .call(legendaxis);
-  // };
 
   let mouseLeave = function(d) {
     d3.selectAll(".topo")
@@ -451,6 +378,7 @@ function make_map(){
       
     tooltip
           .style("opacity", 0)
+
   }
 
   mx_data = Math.max(...data_val[cur_idx])
@@ -463,59 +391,96 @@ function make_map(){
   color = d3.scaleSqrt(scale_d, ["green", "yellow", "red"])
   // color = d3.scaleSequential(scale_d, d3.interpolateRgb("green", "red"))
   // Draw the map
-  svg.append("g")
+
+  in_g = svg.append("g")
     .selectAll("path")
     .data(topo.features)
     .enter()
     .append("path")
     .attr("class", "topo")
       // draw each country
-      .attr("d", d3.geoPath()
-        .projection(projection)
-      )
-      // set the color of each country
-      .attr("fill", function (d) {
-        // console.log(d);
-        d.total = data[cur_idx].get(countryListAlpha3[d.id]) || -1;
-        // console.log("403", data[cur_idx].values())
-        // console.log(d.total, color(d.total))
-        return color(d.total);
-      })
-      .style("opacity", .7)
+    .attr("d", d3.geoPath()
+      .projection(projection)
+    )
+    // set the color of each country
+    .attr("fill", function (d) {
+      d.total = data[cur_idx].get(countryListAlpha3[d.id]) || -1;
+      return color(d.total);
+    })
+    .attr("id", function (d) {
+      // console.log(d.id)
+      return String(d.id)
+    })
+    .style("opacity", .7)
     .on("mouseover", mouseOver )
     .on("mouseleave", mouseLeave )
+
+  // var g = svg.select("g")
+  // console.log(g)
+  // var zoom = d3.zoom()
+  // .scaleExtent([1, 8])
+  // .on('zoom', function() {
+  //     console.log("zoom")
+  //     g.selectAll('path')
+  //     .attr('transform', d3.event.transform);
+  // });
+  // in_g.on("mouseover", mouseOver).on("mouseleave", mouseLeave);
+
+  // svg.call(zoom);
 
   legend({
       color: color,
       title: "Sepecies count"
   })
-  // var legend_x = width - margin.left
-  // var legend_y = height - 60
-  // svg.append("g")
-  //   .attr("class", "legendQuant")
-  //   .attr("transform", "translate(" + legend_x + "," + legend_y+")");
-
-  // var legend = d3.legendColor()
-  //   .labels(labels)
-  //   .title("")
-  //   .scale(scale);
-  // svg.select(".legendQuant")
-  //   .call(legend);
 }
 
-select.addEventListener('click', ({ target }) => { // handler fires on root container click
+const radio_btn = document.getElementById('class_radio');
+radio_btn.addEventListener('click', ({ target }) => { // handler fires on root container click
   console.log("target value", target.value)
   if (!(target.value === undefined)){
     cur_idx = target.value
-    console.log(data[target.value])
+    // console.log(data[target.value])
     make_map()
   }
+});
+
+const search_btn = document.getElementById('search_btn');
+search_btn.addEventListener('click', ({ target }) => { // handler fires on root container click
+  const search_input = document.getElementById('search_in');
+  // console.log("search_input value", search_input.value)
+  search_code = search_input.value.toUpperCase()
+
+  // search_input.value = 
+  if (!(countryList_invert[search_code] === undefined)){
+    search_code = countryList_invert[search_code]
+  }
+  map_path = svg.select("#"+search_code);
+  d_el = document.getElementById(search_code)
+  search_country = data[cur_idx].get(countryListAlpha3[search_code])
+  if (!(search_country === undefined)){
+    d3.selectAll(".topo")
+    .transition()
+    .duration(200)
+    .style("opacity", .5)
+    map_path
+    .transition()
+      .duration(200)
+      .style("opacity", 1)
+      .style("stroke", "black")
+    count = data[cur_idx].get(countryListAlpha3[search_code]) || -1;
+    rect = d_el.getBoundingClientRect();
+    tooltip
+      .style("opacity", 0.8)
+      .html(countryListAlpha3[search_code] + ": " + d3.format(",.2r")(count))
+      .style("left", (rect.x+(rect.width/2)) + "px")		
+      .style("top", (rect.y+(rect.height/2)) + "px");
+  }
+  
 });
 
 myDataPromises = Promise.all(promises).then(function(topo) {
   glo_topo = topo
 	make_map()
-  // svg.call(zoom);
 })
 
 function legend({
