@@ -17,6 +17,12 @@
 	<script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
 
 	<style>
+		    h1 {
+				font: 20px sans-serif; 
+				text-align:center;
+				justify-content: center;
+				margin-top: 3%;
+    		}
 			body {
 				font-family: Arial, Helvetica, sans-serif;
 				font-size: 12px;
@@ -30,7 +36,9 @@
 
 			#class_radio{
 				margin-top: 15px;
-				margin-left: 20%;
+				margin-left: 25%;
+				margin-right: 20%;
+
 			}
 
 			#legend{
@@ -46,6 +54,7 @@
 </head>
 
 <body>
+	<h1 id="map_title">Number of Threatened Total Species in Every Country</h1>
 	<!-- Create an element where the map will take place -->
 	<div class="btn-group" id="class_radio" role="group" aria-label="Basic radio toggle button group">
 		<input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" value = 0>
@@ -67,7 +76,7 @@
 		<label class="btn btn-outline-primary" for="btnradio6">Molluscs</label>
 
 		<input type="radio" class="btn-check" name="btnradio" id="btnradio7" autocomplete="off"  value = 6>
-		<label class="btn btn-outline-primary" for="btnradio7">Other</label>
+		<label class="btn btn-outline-primary" for="btnradio7">Other Inverts</label>
 
 		<input type="radio" class="btn-check" name="btnradio" id="btnradio8" autocomplete="off"  value = 7>
 		<label class="btn btn-outline-primary" for="btnradio8">Plants</label>
@@ -83,7 +92,7 @@
 	</div>
 	<div id="tooltip"></div>
 	<div class="input-group mt-3 mb-3" id="c_in">
-		<input id="search_in" type="text" class="form-control" placeholder="Search by country name" aria-label="Search by country name" aria-describedby="basic-addon2">
+		<input id="search_in" type="text" class="form-control" placeholder="Search by country name or country iso3 (Canada, CAN, Austrilia, AUS, ...)" aria-label="Search by country name" aria-describedby="basic-addon2">
 		<div class="input-group-append">
 		  <button id="search_btn" class="btn btn-outline-secondary" type="button">Search</button>
 		</div>

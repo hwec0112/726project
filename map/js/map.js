@@ -258,7 +258,8 @@ function objectFlip(obj) {
   return ret;
 }
 const countryList_invert = objectFlip(countryListAlpha3);
-// console.log(countryList_invert);
+
+const cat_list = ["Mammals", "Birds", "Reptiles", "Amphibians", "Fishes", "Molluscs", "Other Inverts", "Plants", "Fungi", "Chromists", "Total"]
 
 // set the dimensions and margins of the graph
 var margin = {top: 40, right: 10, bottom: 40, left: 100},
@@ -296,18 +297,6 @@ geo_data = d3.map()
 glo_topo = undefined
 var data = []
 var data_val = []
-// 0: "Name"
-// 1: "Mammals"
-// 2: "Birds"
-// 3: "Reptiles"
-// 4: "Amphibians"
-// 5: "Fishes"
-// 6: "Molluscs"
-// 7: "Other"
-// 8: "Plants"
-// 9: "Fungi"
-// 10: "Chromists"
-// 11: "Total"
 for (let i = 0; i < 11; i++){
   data.push(d3.map())
   data_val.push([])
@@ -434,11 +423,22 @@ function make_map(){
   })
 }
 
+// list enter with input search
+var input = document.getElementById("search_in");
+input.addEventListener("keyup", function(event) {
+  if (event.keyCode === 13) {
+    event.preventDefault();
+    document.getElementById("search_btn").click();
+  }
+});
+
 const radio_btn = document.getElementById('class_radio');
 radio_btn.addEventListener('click', ({ target }) => { // handler fires on root container click
   console.log("target value", target.value)
   if (!(target.value === undefined)){
     cur_idx = target.value
+    title = document.getElementById('map_title');
+    title.innerHTML = `Number of Threatened ${cat_list[cur_idx]} Species in Every Country`
     // console.log(data[target.value])
     make_map()
   }
