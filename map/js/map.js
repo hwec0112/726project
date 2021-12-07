@@ -404,22 +404,9 @@ function make_map(){
     .on("mouseover", mouseOver )
     .on("mouseleave", mouseLeave )
 
-  // var g = svg.select("g")
-  // console.log(g)
-  // var zoom = d3.zoom()
-  // .scaleExtent([1, 8])
-  // .on('zoom', function() {
-  //     console.log("zoom")
-  //     g.selectAll('path')
-  //     .attr('transform', d3.event.transform);
-  // });
-  // in_g.on("mouseover", mouseOver).on("mouseleave", mouseLeave);
-
-  // svg.call(zoom);
-
   legend({
       color: color,
-      title: "Sepecies count"
+      title: "Species count"
   })
 }
 
@@ -445,12 +432,12 @@ radio_btn.addEventListener('click', ({ target }) => { // handler fires on root c
 });
 
 const search_btn = document.getElementById('search_btn');
-search_btn.addEventListener('click', ({ target }) => { // handler fires on root container click
+search_btn.addEventListener('click', ({ target }) => { 
+  // handler fires on root container click
   const search_input = document.getElementById('search_in');
   // console.log("search_input value", search_input.value)
   search_code = search_input.value.toUpperCase()
 
-  // search_input.value = 
   if (!(countryList_invert[search_code] === undefined)){
     search_code = countryList_invert[search_code]
   }
@@ -475,20 +462,24 @@ search_btn.addEventListener('click', ({ target }) => { // handler fires on root 
       .style("left", (rect.x+(rect.width/2)) + "px")		
       .style("top", (rect.y+(rect.height/2)) + "px");
   }
+  else{
+    alert("Country \"" + search_input.value + "\" not found! Try to use country iso3 code.")
+  }
   
 });
 
 myDataPromises = Promise.all(promises).then(function(topo) {
-  glo_topo = topo
-	make_map()
+  glo_topo = topo;
+	make_map();
 })
+
 
 function legend({
   color,
   title,
-  tickSize = 6,
-  width = 320,
-  height = 44 + tickSize,
+  tickSize = 7,
+  width = 350,
+  height = 54 + tickSize,
   marginTop = 18,
   marginRight = 0,
   marginBottom = 16 + tickSize,
